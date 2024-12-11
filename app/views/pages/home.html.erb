@@ -1,2 +1,23 @@
 <h1>Pages#home</h1>
 <p>Find me in app/views/pages/home.html.erb</p>
+<% if current_user %>
+  <p>hello <%= current_user.email %></p>
+  <p>here are your conversations</p>
+  <ul>
+    <% Conversation.involving(current_user).each do |conversation| %>
+      <li>
+        <%= User.find(conversation.recipient_id == current_user.id ? conversation.sender_id : conversation.recipient_id).email %>
+        <%= link_to "View", conversation_path(conversation) %>
+      </li>
+    <% end %>
+<% else %>
+  <p>please login</p>
+<% end %>
+
+<%= form_with url: search_users_path, method: :get, local: true do %>
+  <div class="form-group">
+    <%= label_tag :query, "Search for users" %>
+    <%= text_field_tag :query, params[:query], class: "form-control" %>
+  </div>
+  <%= submit_tag "Search", class: "btn btn-primary" %>
+<% end %>
