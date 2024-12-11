@@ -1,0 +1,27 @@
+<h1>Messages</h1>
+
+<div class="container chat">
+  <div id="messages" class="messages">
+    <%= turbo_frame_tag "messages" do %>
+      <% @messages.each do |message| %>
+        <div id="message-<%= message.id %>">
+          <small>
+            <strong><%= message.user.email %></strong>
+            <i><%= message.created_at.strftime("%a %b %e at %l:%M %p") %></i>
+          </small>
+          <p><%= message.content %></p>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= form_with(model: [@conversation, @message], local: true, data: { turbo_stream: true }) do |form| %>
+  <div class="field">
+    <%= form.label :content %>
+    <%= form.text_area :content %>
+  </div>
+  <div class="actions">
+    <%= form.submit "Send" %>
+  </div>
+<% end %>

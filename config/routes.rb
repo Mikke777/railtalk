@@ -11,6 +11,13 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
+  get 'search_users', to: 'users#search', as: 'search_users'
+
   # Defines the root path route ("/")
   # root "posts#index"
+  resources :conversations do
+    resources :messages, only: [:index, :create]
+  end
+
+  resources :messages, only: [:show]
 end
