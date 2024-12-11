@@ -7,6 +7,9 @@ class ConversationsController < ApplicationController
 
   def show
     @conversation = Conversation.find(params[:id])
+    unless @conversation.sender_id == current_user.id || @conversation.recipient_id == current_user.id
+      redirect_to conversations_path, alert: "You are not authorized to view this conversation."
+    end
   end
 
   def create
